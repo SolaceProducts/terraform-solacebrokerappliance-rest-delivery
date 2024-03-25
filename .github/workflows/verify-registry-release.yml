@@ -1,0 +1,59 @@
+# Launched manually to test new release from registry
+on:
+  workflow_dispatch:
+    inputs:
+      release_version:
+        description: 'The version of the release in the Terraform registry (expecting semver format)'
+        required: true
+        default: '0.1.0-rc.1'
+      public_release:
+        type: boolean
+        description: 'Check if this is a public release (from registry.terraform.io). Private release is from app.terraform.io'
+        required: true
+        default: false
+
+jobs:
+  build:
+    name: Verify registry release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up Go
+        uses: actions/setup-go@v3
+        with:
+          go-version: "1.22"
+
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      - name: Setup test broker
+        run: |
+          mkdir -p $HOME/solace; chmod 777 $HOME/solace
+          docker run -d -p 8080:8080 -p 55555:55555 --shm-size=1g --env username_admin_globalaccesslevel=admin --env username_admin_password=admin --env system_scaling_maxkafkabridgecount="10" --name=solace \
+            --mount type=bind,source=$HOME/solace,destination=/var/lib/solace,ro=false solace/solace-pubsub-standard:"10.6.1.52"
+          while ! curl -s localhost:8080 | grep aurelia ; do sleep 1 ; done
+
+      - name: Set up Terraform latest - public
+        if: ${{ github.event.inputs.public_release != 'false' }}
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_wrapper: true
+
+      - name: Set up Terraform latest - private, with token
+        if: ${{ github.event.inputs.public_release == 'false' }}
+        uses: hashicorp/setup-terraform@v3
+        with:
+          cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
+          terraform_wrapper: true
+
+      - name: Setup token and patch module with release information
+        run: |
+          MODULENAME=rest-delivery
+          if [ "${{ github.event.inputs.public_release }}" == "false" ] ; then
+            echo Internal release
+            MODULE_REF="app.terraform.io/SolaceDev/$MODULENAME/solacebroker"
+          else
+            echo Public release
+            MODULE_REF="SolaceProducts/$MODULENAME/solacebroker"
+          fi
+          ci/scripts/test-module.sh ci/module-test/ "" $MODULE_REF "${{ github.event.inputs.release_version }}"
+
