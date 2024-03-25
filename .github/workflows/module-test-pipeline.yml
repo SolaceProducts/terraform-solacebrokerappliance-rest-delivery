@@ -59,7 +59,7 @@ jobs:
           SWAGGER_SPEC_NAME=`ls ci/swagger_spec`
           echo "Generating code using spec $SWAGGER_SPEC_NAME"
           rm ./*.tf
-          SEMP_V2_SWAGGER_CONFIG_EXTENDED_JSON="ci/swagger_spec/$SWAGGER_SPEC_NAME" MODULE_TEMPLATE_FOLDER="internal/gen-template" ~/go/bin/broker-terraform-code-generator software-module
+          SEMP_V2_SWAGGER_CONFIG_EXTENDED_JSON="ci/swagger_spec/$SWAGGER_SPEC_NAME" MODULE_TEMPLATE_FOLDER="internal/gen-template" ~/go/bin/broker-terraform-code-generator appliance-module
 
       - name: Add copyright headers where needed
         run: |

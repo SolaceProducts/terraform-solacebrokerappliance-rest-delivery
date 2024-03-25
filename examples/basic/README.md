@@ -15,7 +15,7 @@ Important: The REST delivery point must have permission to consume messages from
 
 ### Optional Inputs
 
-Optional module input variables have the same name as the attributes of the underlying provider resource. If omitted then the default for the related resource attribute will be configured on the broker. For attributes and defaults, refer to the [documentation of "solacebroker_msg_vpn_rest_delivery_point_rest_consumer"](https://registry.terraform.io/providers/SolaceProducts/solacebroker/latest/docs/resources/msg_vpn_rest_delivery_point_rest_consumer#optional).
+Optional module input variables have the same name as the attributes of the underlying provider resource. If omitted then the default for the related resource attribute will be configured on the broker. For attributes and defaults, refer to the [documentation of "solacebroker_msg_vpn_rest_delivery_point_rest_consumer"](https://registry.terraform.io/providers/solaceproducts/solacebroker/latest/docs/resources/msg_vpn_rest_delivery_point_rest_consumer#optional).
 
 The module default for the `enabled` variable is true, which enables both the RDP and the REST consumer resources.
 
@@ -50,7 +50,7 @@ cd examples/basic
 
 ### Adjust Provider Configuration
 
-Adjust the [provider parameters](https://registry.terraform.io/providers/SolaceProducts/solacebroker/latest/docs#schema) in `main.tf` according to your broker. The example configuration shows settings for a local broker running in Docker.
+Adjust the [provider parameters](https://registry.terraform.io/providers/solaceproducts/solacebroker/latest/docs#schema) in `main.tf` according to your broker. The example configuration shows settings for a local broker running in Docker.
 
 ### Create the resource
 

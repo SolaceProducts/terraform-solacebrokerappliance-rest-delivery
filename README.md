@@ -1,4 +1,4 @@
-# Solace PubSub+ Software Event Broker REST Delivery Terraform Module
+# Solace PubSub+ Appliance REST Delivery Terraform Module
 
 Terraform module to support the setup of a [REST consumer](https://docs.solace.com/API/REST/REST-Consumers.htm) on the [Solace PubSub+ Event Broker](https://solace.com/products/event-broker/).
 
@@ -34,11 +34,11 @@ Additional optional module variables names are the same as the underlying resour
 
 | Resource name |
 |---------------|
-|[solacebroker_msg_vpn_rest_delivery_point](https://registry.terraform.io/providers/SolaceProducts/solacebroker/latest/docs/resources/msg_vpn_rest_delivery_point#optional)|
-|[solacebroker_msg_vpn_rest_delivery_point_rest_consumer](https://registry.terraform.io/providers/SolaceProducts/solacebroker/latest/docs/resources/msg_vpn_rest_delivery_point_rest_consumer#optional)|
-|[solacebroker_msg_vpn_rest_delivery_point_queue_binding](https://registry.terraform.io/providers/SolaceProducts/solacebroker/latest/docs/resources/msg_vpn_rest_delivery_point_queue_binding#optional)|
-|[solacebroker_msg_vpn_rest_delivery_point_queue_binding_request_header](https://registry.terraform.io/providers/SolaceProducts/solacebroker/latest/docs/resources/msg_vpn_rest_delivery_point_queue_binding_request_header#optional)|
-|[solacebroker_msg_vpn_rest_delivery_point_queue_binding_protected_request_header](https://registry.terraform.io/providers/SolaceProducts/solacebroker/latest/docs/resources/msg_vpn_rest_delivery_point_queue_binding_protected_request_header#optional)|
+|[solacebroker_msg_vpn_rest_delivery_point](https://registry.terraform.io/providers/solaceproducts/solacebroker/latest/docs/resources/msg_vpn_rest_delivery_point#optional)|
+|[solacebroker_msg_vpn_rest_delivery_point_rest_consumer](https://registry.terraform.io/providers/solaceproducts/solacebroker/latest/docs/resources/msg_vpn_rest_delivery_point_rest_consumer#optional)|
+|[solacebroker_msg_vpn_rest_delivery_point_queue_binding](https://registry.terraform.io/providers/solaceproducts/solacebroker/latest/docs/resources/msg_vpn_rest_delivery_point_queue_binding#optional)|
+|[solacebroker_msg_vpn_rest_delivery_point_queue_binding_request_header](https://registry.terraform.io/providers/solaceproducts/solacebroker/latest/docs/resources/msg_vpn_rest_delivery_point_queue_binding_request_header#optional)|
+|[solacebroker_msg_vpn_rest_delivery_point_queue_binding_protected_request_header](https://registry.terraform.io/providers/solaceproducts/solacebroker/latest/docs/resources/msg_vpn_rest_delivery_point_queue_binding_protected_request_header#optional)|
 
 Most optional variables' default value is `null`, meaning that if not provided then the resource default value will be provisioned on the broker.
 
@@ -54,7 +54,7 @@ Note that the "rest consumer" and the "protected request headers" outputs are [s
 
 | Name | Version |
 |------|---------|
-| <a name="provider_solacebroker"></a> [solacebroker](https://registry.terraform.io/providers/SolaceProducts/solacebroker/latest) | ~> 0.9 |
+| <a name="provider_solacebroker"></a> [solacebroker](https://registry.terraform.io/providers/solaceproducts/solacebroker/latest) | ~> 0.9 |
 
 ## Resources
 

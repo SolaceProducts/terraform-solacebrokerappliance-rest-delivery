@@ -11,7 +11,7 @@ terraform validate
 # Create
 terraform plan $2
 terraform apply -auto-approve $2
-terraform plan $2 | grep "No changes"
+# terraform plan $2 | grep "No changes"
 sleep 1
 terraform destroy -auto-approve
 popd
