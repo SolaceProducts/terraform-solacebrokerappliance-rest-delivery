@@ -27,7 +27,7 @@ Important: The REST delivery point must have permission to consume messages from
 * `request_headers` - provided as a set of objects in the example. Also check the [using-substitution-expressions](/examples/using-substitution-expressions) example for additional samples.
 * `protected_request_headers` - provided as a set of objects in the example
 
-Optional module input variables have the same name as the attributes of the underlying provider resource. If omitted then the default for the related resource attribute will be configured on the broker. For attributes and defaults, refer to the [documentation of "solacebroker_msg_vpn_rest_delivery_point_queue_binding"](https://registry.terraform.io/providers/solaceproducts/solacebroker/latest/docs/resources/msg_vpn_rest_delivery_point_queue_binding#optional).
+Optional module input variables have the same name as the attributes of the underlying provider resource. If omitted then the default for the related resource attribute will be configured on the broker. For attributes and defaults, refer to the [documentation of "solacebroker_msg_vpn_rest_delivery_point_queue_binding"](https://registry.terraform.io/providers/solaceproducts/solacebrokerappliance/latest/docs/resources/msg_vpn_rest_delivery_point_queue_binding#optional).
 
 The module default for the `enabled` variable is true, which enables both the RDP and the REST consumer resources.
 
@@ -65,7 +65,7 @@ cd examples/adding-headers
 
 ### Adjust Provider Configuration
 
-Adjust the [provider parameters](https://registry.terraform.io/providers/solaceproducts/solacebroker/latest/docs#schema) in `main.tf` according to your broker. The example configuration shows settings for a local broker running in Docker.
+Adjust the [provider parameters](https://registry.terraform.io/providers/solaceproducts/solacebrokerappliance/latest/docs#schema) in `main.tf` according to your broker. The example configuration shows settings for a local broker running in Docker.
 
 ### Create the resource
 
