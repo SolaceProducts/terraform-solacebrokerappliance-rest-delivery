@@ -13,10 +13,10 @@
 # limitations under the License.
 
 provider "solacebroker" {
-  username = "admin"
-  password = "admin"
-  url      = "http://localhost:8080"
-  skip_api_check  = true
+  username       = "admin"
+  password       = "admin"
+  url            = "http://localhost:8080"
+  skip_api_check = true
 }
 
 # The RDP requires a queue to bind to.
