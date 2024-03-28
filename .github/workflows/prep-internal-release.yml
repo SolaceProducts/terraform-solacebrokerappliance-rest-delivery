@@ -1,0 +1,121 @@
+# Launched manually
+on:
+  workflow_dispatch:
+    inputs:
+      prev_branch_name:
+        description: 'Prev branch name, must start with v'
+        required: true
+        default: 'v0.1.0-rc.1'
+      release_branch_name:
+        description: 'Release branch name, must start with v'
+        required: true
+        default: 'v0.1.0-rc.2'
+
+
+jobs:
+  build:
+    name: Prep release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up Go
+        uses: actions/setup-go@v3
+        with:
+          go-version: "1.22"
+
+      - name: Checkout the code
+        uses: actions/checkout@v2
+
+      - name: Check release version and set next version
+        run: |
+          if ! echo "${{ github.event.inputs.release_branch_name }}" | grep ^v ; then
+            echo "Incorrect release branch name ${{ github.event.inputs.release_branch_name }}, must start with 'v'" ; exit 1
+          fi
+          if echo "${{ github.ref_name }}" | grep ^dev ; then
+            # set next dev version GH env, otherwise set it empty
+            echo "NEXT_DEV_VERSION=$(echo ${{ github.ref_name }} | awk -F. -v OFS=. '{$NF += 1 ; print}')" >> $GITHUB_ENV
+          fi
+
+      - name: Code format, dependencies, checks
+        run: |
+          find . -type d -print0 | xargs -0 -n1 terraform fmt
+
+      - name: Setup test broker
+        run: |
+          mkdir -p $HOME/solace; chmod 777 $HOME/solace
+          docker run -d -p 8080:8080 -p 55555:55555 --shm-size=1g --env username_admin_globalaccesslevel=admin --env username_admin_password=admin --env system_scaling_maxkafkabridgecount="10" --name=solace \
+            --env system_scaling_maxconnectioncount="1000" --mount type=bind,source=$HOME/solace,destination=/var/lib/solace,ro=false solace/solace-pubsub-standard:latest
+          while ! curl -s localhost:8080 | grep aurelia ; do sleep 1 ; done
+
+      - name: Check code builds and pass acceptance test
+        run: |
+          ci/scripts/test-module.sh ci/module-test
+          for dir in examples/*; do (ci/scripts/test-module.sh "$dir"); done
+
+      - name: Ensure version reflects release candidate version
+        run: |
+          VERSION=$(echo "${{ github.event.inputs.release_branch_name }}" | cut -d'v' -f2)
+          echo $VERSION > VERSION
+
+      - name: Add copyright headers where needed
+        run: |
+          go install github.com/google/addlicense@latest
+          addlicense -c 'Solace Corporation. All rights reserved.' -v -l apache ./*.tf
+          addlicense -c 'Solace Corporation. All rights reserved.' -v -l apache $(find ./examples -name "*.tf" -type f -print0 | xargs -0)
+
+      - name: Check changed files
+        uses: tj-actions/verify-changed-files@v17
+        id: check-changed-files
+
+      - name: Run step only when any of the files change
+        if: steps.check-changed-files.outputs.files_changed == 'true'
+        run: |
+          echo "Changed files: ${{ steps.check-changed-files.outputs.changed_files }}"
+
+      - name: Commit back updates when any of the files change
+        if: steps.check-changed-files.outputs.files_changed == 'true'
+        uses: EndBug/add-and-commit@v9
+        with:
+          committer_name: GitHub Actions
+          committer_email: actions@github.com
+          message: 'Updating release candidate [skip ci]'
+          new_branch: GeneratedSourceUpdates-${{ github.ref_name }}
+
+      - name: Create pull request if needed, then break here because manual approval of the changes is required
+        if: steps.check-changed-files.outputs.files_changed == 'true'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          CURRENT_BRANCH=${GITHUB_REF_NAME}
+          gh pr create -B ${CURRENT_BRANCH} -H "GeneratedSourceUpdates-${CURRENT_BRANCH}" --title "Merge generated source updates into release candidate ${CURRENT_BRANCH}" --body 'Created by Github action'
+          echo Review and approve PR before release can continue
+          exit 1 // force actions stop here
+
+      - name: Create release branch starting point
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git fetch
+          git push origin refs/remotes/origin/${{ github.event.inputs.prev_branch_name }}:refs/heads/${{ github.event.inputs.release_branch_name }}
+
+      - name: Create PR to release branch
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          CURRENT_BRANCH=${GITHUB_REF_NAME}
+          gh pr create -B ${{ github.event.inputs.release_branch_name }} --title "New release ${{ github.event.inputs.release_branch_name }}" --body 'Created by Github action'
+
+      # - name: Create PR to release branch
+      #   uses: peterjgrainger/action-create-branch@v2.4.0
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #   with:
+      #     branch: "${{ github.event.inputs.release_branch_name }}"
+
+      # - name: Tag the release branch
+      #   if: env.NEXT_DEV_VERSION != ''
+      #   uses: peterjgrainger/action-create-branch@v2.4.0
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #   with:
+      #     branch: ${{ env.NEXT_DEV_VERSION }}
+
