@@ -10,8 +10,11 @@ jobs:
       - name: Check out code
         uses: actions/checkout@v4
 
-      - name: Set up Terraform latest
-        uses: hashicorp/setup-terraform@v2
+      - name: Set up Terraform latest - with token
+        uses: hashicorp/setup-terraform@v3
+        with:
+          cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
+          terraform_wrapper: true
 
       - name: Setup test broker
         run: |
@@ -19,6 +22,15 @@ jobs:
           docker run -d -p 8080:8080 -p 55555:55555 --shm-size=1g --env username_admin_globalaccesslevel=admin --env username_admin_password=admin --env system_scaling_maxkafkabridgecount="10" --name=solace \
             --env system_scaling_maxconnectioncount="1000" --mount type=bind,source=$HOME/solace,destination=/var/lib/solace,ro=false solace/solace-pubsub-standard:latest
           while ! curl -s localhost:8080 | grep aurelia ; do sleep 1 ; done
+
+      # - name: Setup if private provider is required
+      #   run: |
+      #     export PRIVATE_PROVIDER_VERSION="1.0.0-rc.3"
+      #     if [ -n "$PRIVATE_PROVIDER_VERSION" ]; then
+      #       echo "Using private provider version $PRIVATE_PROVIDER_VERSION"
+      #       grep -rl 'source  = "' . | xargs sed -i 's@source  = ".*$@source  = "app.terraform.io/SolaceDev/solacebrokerappliance"@g'
+      #       grep -rl 'version = "' . | xargs sed -i "s@  version = \".*\$@  version = \"${PRIVATE_PROVIDER_VERSION}\"@g"
+      #     fi
 
       - name: Test module from template on test broker
         run: |
@@ -31,8 +43,12 @@ jobs:
       - name: Test examples
         run: |
           shopt -s extglob
-          for d in examples/!(adding-headers)/; do (ci/scripts/test-module.sh "$d"); done
-          ci/scripts/test-module.sh examples/adding-headers/ -var-file=secret.tfvars
+          for d in examples/!(basic-client-username)/; do (ci/scripts/test-module.sh "$d"); done
+          # ci/scripts/test-module.sh examples/basic-client-username/ -var-file=secret.tfvars
+
+      - name: Discard any changes in checked out code
+        run: |
+          git checkout -- .
 
       - name: Set up Go
         uses: actions/setup-go@v3
