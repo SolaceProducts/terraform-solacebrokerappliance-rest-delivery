@@ -1,6 +1,6 @@
-# Solace PubSub+ Software Event Broker REST Delivery Terraform Module
+# Solace PubSub+ Appliance REST Delivery Terraform Module
 
-This Terraform module supports the setup of a [REST consumer](https://docs.solace.com/API/REST/REST-Consumers.htm) on the [Solace PubSub+ Event Broker](https://solace.com/products/event-broker/).
+This Terraform module supports the setup of a [REST consumer](https://docs.solace.com/API/REST/REST-Consumers.htm) on the [Solace PubSub+ Appliance](https://solace.com/products/event-broker/).
 
 Given a queue on the broker, as a destination for messages to be forwarded to a REST consumer application, this module configures a [REST delivery point](https://docs.solace.com/API/REST/REST-Consumers.htm#_Toc433874658) between the queue and the application.
 

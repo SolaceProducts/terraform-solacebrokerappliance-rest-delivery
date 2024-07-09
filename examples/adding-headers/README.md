@@ -1,6 +1,6 @@
 # Adding REST Request Headers in REST Delivery Configuration Example
 
-Configuration in this directory demonstrates how to specify [request headers](https://docs.solace.com/Services/Managing-RDPs.htm#configuring-request-headers) when configuring [REST messaging](https://docs.solace.com/API/REST/REST-Consumers.htm) on the PubSub+ event broker, leveraging the REST Delivery Terraform module.
+Configuration in this directory demonstrates how to specify [request headers](https://docs.solace.com/Services/Managing-RDPs.htm#configuring-request-headers) when configuring [REST messaging](https://docs.solace.com/API/REST/REST-Consumers.htm) on the PubSub+ appliance, leveraging the REST Delivery Terraform module.
 
 There are two types of request header resources:
 
@@ -50,7 +50,7 @@ This example will create the following resources:
 
 ## Running the Example
 
-### Access to a PubSub+ Event Broker
+### Access to a PubSub+ Appliance
 
 If you don't already have access to a broker, see the [Developers page](https://www.solace.dev/) for options to get started.
 
