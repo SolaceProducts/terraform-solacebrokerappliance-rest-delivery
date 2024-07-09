@@ -13,15 +13,13 @@
 # limitations under the License.
 
 provider "solacebroker" {
-  username       = "admin"
-  password       = "admin"
-  url            = "http://localhost:8080"
-  skip_api_check = true
+  username = "admin"
+  password = "admin"
+  url      = "http://localhost:8080"
 }
 
 # The RDP requires a queue to bind to.
-# Recommended: Use the queue-endpoint module to create the queue
-# TODO: Uncomment the following block and replace the resource block once the queue-endpoint module is available
+# Option: Use the queue-endpoint module to create the queue. If using this option then also uncomment the queue_name in module "testrdp" below.
 # module "rdp_queue" {
 #   source = SolaceProducts/queue-endpoint/solacebroker
 #
