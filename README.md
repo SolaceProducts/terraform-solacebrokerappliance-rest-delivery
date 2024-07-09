@@ -1,10 +1,10 @@
-# Solace PubSub+ Appliance REST Delivery Terraform Module
+# Solace PubSub+ Software Event Broker REST Delivery Terraform Module
 
-Terraform module to support the setup of a [REST consumer](https://docs.solace.com/API/REST/REST-Consumers.htm) on the [Solace PubSub+ Event Broker](https://solace.com/products/event-broker/).
+This Terraform module supports the setup of a [REST consumer](https://docs.solace.com/API/REST/REST-Consumers.htm) on the [Solace PubSub+ Event Broker](https://solace.com/products/event-broker/).
 
 Given a queue on the broker, as a destination for messages to be forwarded to a REST consumer application, this module configures a [REST delivery point](https://docs.solace.com/API/REST/REST-Consumers.htm#_Toc433874658) between the queue and the application.
 
-Specific use case details are provided in the [Examples](#examples).
+Specific use case details are provided in the [Examples](#examples) section.
 
 ## Limitations
 
@@ -25,22 +25,22 @@ Important: The REST delivery point must have permission to consume messages from
 
 ### Optional
 
-* `client_profile_name` - the [client profile associated](https://docs.solace.com/Services/Managing-RDPs.htm#associating-client-profiles-with-REST-delivery-points). If not provided, the `default` client profile for the Message VPN will be associated.
-* `request_headers` - A set of request headers to be added to the HTTP request
-* `protected_request_headers` - A set of protected request headers with sensitive value to be added to the HTTP request
+* `client_profile_name` - The [client profile associated](https://docs.solace.com/Services/Managing-RDPs.htm#associating-client-profiles-with-REST-delivery-points). If not provided, the `default` client profile for the Message VPN will be associated.
+* `request_headers` - A set of request headers to be added to the HTTP request.
+* `protected_request_headers` - A set of protected request headers with sensitive value to be added to the HTTP request.
 * `rest_consumer_name` - The name of the REST consumer to be created. The default is `consumer`.
 
-Additional optional module variables names are the same as the underlying resource attributes. The recommended approach to determine variable name mappings is to look up the resource's documentation for matching attribute names:
+Additional optional module variables names are the same as the underlying resource attributes. To determine the variable name mappings, we recommend that you look for matching attribute names in the documentation for the resource:
 
 | Resource name |
 |---------------|
-|[solacebroker_msg_vpn_rest_delivery_point](https://registry.terraform.io/providers/solaceproducts/solacebrokerappliance/latest/docs/resources/msg_vpn_rest_delivery_point#optional)|
-|[solacebroker_msg_vpn_rest_delivery_point_rest_consumer](https://registry.terraform.io/providers/solaceproducts/solacebrokerappliance/latest/docs/resources/msg_vpn_rest_delivery_point_rest_consumer#optional)|
-|[solacebroker_msg_vpn_rest_delivery_point_queue_binding](https://registry.terraform.io/providers/solaceproducts/solacebrokerappliance/latest/docs/resources/msg_vpn_rest_delivery_point_queue_binding#optional)|
-|[solacebroker_msg_vpn_rest_delivery_point_queue_binding_request_header](https://registry.terraform.io/providers/solaceproducts/solacebrokerappliance/latest/docs/resources/msg_vpn_rest_delivery_point_queue_binding_request_header#optional)|
-|[solacebroker_msg_vpn_rest_delivery_point_queue_binding_protected_request_header](https://registry.terraform.io/providers/solaceproducts/solacebrokerappliance/latest/docs/resources/msg_vpn_rest_delivery_point_queue_binding_protected_request_header#optional)|
+|[solacebroker_msg_vpn_rest_delivery_point](https://registry.terraform.io/providers/SolaceProducts/solacebrokerappliance/latest/docs/resources/msg_vpn_rest_delivery_point#optional)|
+|[solacebroker_msg_vpn_rest_delivery_point_rest_consumer](https://registry.terraform.io/providers/SolaceProducts/solacebrokerappliance/latest/docs/resources/msg_vpn_rest_delivery_point_rest_consumer#optional)|
+|[solacebroker_msg_vpn_rest_delivery_point_queue_binding](https://registry.terraform.io/providers/SolaceProducts/solacebrokerappliance/latest/docs/resources/msg_vpn_rest_delivery_point_queue_binding#optional)|
+|[solacebroker_msg_vpn_rest_delivery_point_queue_binding_request_header](https://registry.terraform.io/providers/SolaceProducts/solacebrokerappliance/latest/docs/resources/msg_vpn_rest_delivery_point_queue_binding_request_header#optional)|
+|[solacebroker_msg_vpn_rest_delivery_point_queue_binding_protected_request_header](https://registry.terraform.io/providers/SolaceProducts/solacebrokerappliance/latest/docs/resources/msg_vpn_rest_delivery_point_queue_binding_protected_request_header#optional)|
 
-Most optional variables' default value is `null`, meaning that if not provided then the resource default value will be provisioned on the broker.
+The default value for most of the optional variables is `null`, meaning that if you don’t provide a value then the default value of the resource is provisioned on the event broker.
 
 -> The module default for the `enabled` optional variable is `true`, which differ from the resource attribute default.
 
@@ -54,11 +54,11 @@ Note that the "rest consumer" and the "protected request headers" outputs are [s
 
 | Name | Version |
 |------|---------|
-| <a name="provider_solacebroker"></a> [solacebroker](https://registry.terraform.io/providers/solaceproducts/solacebrokerappliance/latest) | >= 1.0 |
+| <a name="provider_solacebrokerappliance"></a> [solacebrokerappliance](https://registry.terraform.io/providers/SolaceProducts/solacebrokerappliance/latest) | >= 1.0 |
 
 ## Resources
 
-The following table shows the resources created. "X" denotes a resource always created, "O" is a resource that may be created optionally  
+The following table shows the resources created. "X" denotes a resource that is always created, "O" denotes a resource that you have the option to create.  
 
 | Name | |
 |------|------|
@@ -70,7 +70,7 @@ The following table shows the resources created. "X" denotes a resource always c
 
 ## Examples
 
-Refer to the following configuration examples:
+The following examples demonstrate several specific use cases for this module:
 
 - [Basic](examples/basic)
 - [Substitution expressions](examples/using-substitution-expressions)
