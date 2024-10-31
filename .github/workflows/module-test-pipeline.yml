@@ -1,6 +1,10 @@
-name: Provider Test Pipeline
+name: Module Test Pipeline - Development Branches
 
-on: push
+on:
+  push:
+    branches:
+      - dev*
+      - v*
 
 jobs:
   test:
@@ -53,7 +57,7 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@v3
         with:
-          go-version: "1.22"
+          go-version: "1.23"
 
       - name: Checkout generator
         uses: actions/checkout@v4
