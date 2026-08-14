@@ -1,0 +1,25 @@
+version: 3
+
+project:
+  locator: SolaceProducts_terraform-solacebrokerappliance-rest-delivery
+  id: SolaceProducts_terraform-solacebrokerappliance-rest-delivery
+  name: terraform-solacebrokerappliance-rest-delivery
+  teams: []
+  labels:
+    - terraform
+
+vendoredDependencies:
+  forceRescans: false
+  scanMethod: CLILicenseScan
+  licenseScanPathFilters:
+    exclude:
+      - "./.git"
+      - "./.github"
+
+paths:
+  exclude:
+    - ./.git
+    - ./.github
+
+telemetry:
+  scope: full
